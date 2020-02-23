@@ -1,0 +1,64 @@
+\chapter{\MakeUppercase{Построение рабочей области схвата в вертикальной плоскости}}
+
+\section{Выражение матрицы однородного преобразования для соседних
+звеньев через параметры Денавита-Хартенберга}
+Используем решение прямой задачи кинематики, полученное методом однородных преобразований.
+
+Требуется найти $ \rho_A $ - столбец однородных координат точки $ А $ в неподвижных осях.
+$$ \rho_A=\begin{bmatrix}
+X_A \\
+Y_A \\
+Z_A \\
+1
+\end{bmatrix} $$
+
+Известны $ T_{i, i+1} , \rho_A^{(N)}$.
+
+\begin{align*}
+    & \rho_A^{(N-1)}=T_{N-1, N}\cdot \rho_A^{(N)} \\
+    & \rho_A^{(N-2)}=T_{N-2, N-1}\cdot \rho_A^{(N-1)}=T_{N-2, N-1}\cdot T_{N-1,N} \cdot \rho_A^{(N)} \\
+    & \vdots  \\
+    & \rho_{A} =T_{01}\cdot T_{12}\cdot \dots \cdot T_{N-1, N} \cdot \rho_A^{(N)}
+\end{align*}
+
+Тогда матрица однородных преобразований вычисляется следующим образом: 
+$$ T_{0, N}=T_{01}\cdot T_{12}\cdot \dots \cdot T_{N-1, N}, $$
+
+\noindent причем $ T_{i, i+1} $ вычисляется, как показано ниже:
+$$  T_{i, i+1} = T_{\theta_i} \cdot T_{d_i} \cdot T_{a_{i+1}} \cdot T_{\alpha_{i+1}}, $$
+
+\noindent где $ T_\theta $ - матрица поворота вокруг оси \textit{Z}, $ T_d $ - матрица параллельного переноса вдоль оси \textit{Z}, $ T_a $ - матрица параллельного переноса вдоль оси \textit{X}, $ T_\alpha $ - матрица поворота вокруг оси \textit{X}.
+
+\begin{align*}
+    & T_\theta = \begin{bmatrix}
+        \cos \theta_i & -\sin \theta_i & 0 & 0 \\
+        \sin \theta_i & \cos \theta_i & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1
+    \end{bmatrix}, 
+    T_d = \begin{bmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & d \\
+        0 & 0 & 0 & 1
+    \end{bmatrix}, \\
+    & T_a = \begin{bmatrix}
+        1 & 0 & 0 & a_{i} \\
+        0 & 1 & 0 & 0 \\
+        0 & 0 & 1 & 0 \\
+        0 & 0 & 0 & 1
+    \end{bmatrix},
+    T_\alpha = \begin{bmatrix}
+        1 & 0 & 0 & 0 \\
+        0 & \cos \alpha_{i} & -\sin \alpha_{i} & 0 \\
+        0 & \sin \alpha_{i} & \cos \alpha_{i} & 0 \\
+        0 & 0 & 0 & 1
+    \end{bmatrix} .
+\end{align*}
+
+\section{Рабочая область манипулятора в вертикальной плоскости}
+Построение рабочей области было проведено в среде \textit{Wolfram Mathematica}. 
+
+\begin{code}
+    
+\end{code}
