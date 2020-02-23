@@ -1,25 +1,43 @@
 \chapter{\MakeUppercase{Управление по положению схвата. Аналитический метод. }}
-\section{Таблица параметров Денавита-Хартенберга}
-Расчет углов сочленения производится с помощью результатов точного аналитического решения обратной задачи о положениях:
-\[ X=d_1+l_2\sin\varphi_2+l_3\sin{\varphi_2+\varphi_3} \]
 
-\begin{table}[ht]
-    \caption{Таблица параметров Денавита-Хартенберга}
-    \label{table_dh}
-    \centering
-    \begin{tabular}{|c|c|c|c|c|c|}
-    \hline Номер звена & Тип звена & $ \theta_i $ & $ d_i $ & $ d_i $ & $ \alpha_i $ \\
-    \hline 1 & П & 0                            & $ d_{1}^{*} $ & $ a_1 $ & 0  \\
-    \hline 2 & В & $ 0^\circ ..\: 180^\circ $   & $ d_2 $ & $ a_2 $ & 0 \\
-    \hline 3 & В & $ 60^\circ ..\: 338^\circ $  & $ d_3 $ & 0 & $ -90^\circ $ \\
-    \hline 4 & В & $ \pm 350^\circ $            & $ d_4 $ & 0 & $ 90^\circ $ \\
-    \hline 5 & В & $ 61^\circ ..\: 299^\circ $  & $ d_5 $ & 0 & $ -90^\circ $ \\
-    \hline 6 & В & $ \pm 350^\circ $            & $ d_6 $ & 0 & 0 \\
-    \hline
-    \end{tabular}
-\end{table}
+Расчет углов в сочленениях производится с помощью результатов точного аналитического решения обратной задачи о положениях:
+\begin{align*}
+    X_{1A}&=d_1+l_2\sin\varphi_2+l_3\sin{(\varphi_2+\varphi_3)} \\
+   Z_{1A}&=l_1+l_2\cos\varphi_2+l_3\cos{(\varphi_2+\varphi_3)} \label{eq:graph} \tag{1}
+\end{align*}
+%рисунок с обозначением углов и отмеченным х с волной и z с волной
+Преобразуя данные уравнения, получим:
+\begin{align*}
+    l_2\sin\varphi_2+l_3\sin{(\varphi_2+\varphi_3)}&=X_{1A}-d_1=\tilde X \\
+   l_2\cos\varphi_2+l_3\cos{(\varphi_2+\varphi_3)}&=Z_{1A}-l_1=\tilde Z \\
+   \tilde l=\sqrt{\tilde X^2+\tilde Z^2} \\
+   \alpha=\pi-\varphi_3
+\end{align*}
+По теореме косинусов:
+\begin{align*}
+    \tilde l^2 &= l_3^2+l_2^2-2 l_2 l_3 \cos\alpha\\ 
+     \cos\varphi_3 &= \frac{\tilde l^2-l_3^2-l_2^2}{2l_2l_3}=\frac{(\tilde X^2+\tilde Z^2)-(l_3^2+l_2^2)}{2l_2l_3}=D
+\end{align*}
+Замечание: если $|D|>1$, то программное движение нереализуемо, так как координаты целевой точки вне рабочей области.
+$$\varphi_3=\pm \arccos{D+2\pi n}, n\in\zeta$$
 
-\section{Кинематические схемы манипулятора}
+%?? дополнительный рисунок ?? 
+Найдем $\varphi_2$:
+\begin{align*}
+\tg\beta&=\frac{\tilde Z}{\tilde X} \\
+\beta&=\arctan{(\tilde Z,\tilde X)}
+\end{align*}
 
-В приложениях А и Б приведены кинематическая схема манипулятора из спецификации, кинематическая схема с системами координат для робота KUKA KR 30 JET. Спецификация взята из каталога [1]. %  http://robotforum.ru/promyishlennyie-robotyi.html
+По теореме косинусов:
+\begin{align*}
+    l_3^2 &= \tilde l^2+l_2^2-2\tilde l l_3 \cos\gamma \\
+    \cos\gamma &= \frac{\tilde l^2+l_2^2-l_3^2}{2\tilde l l_2} \\
+    \gamma &=\pm \arccos\frac{\tilde l^2+l_2^2-l_3^2}{2\tilde l l_2}
+\end{align*}
+$$\varphi_2+\gamma+\beta=\frac\pi 2$$ 
 
+Тогда $$\varphi_2=\frac \pi 2 -\gamma-\beta.$$
+
+Для проверки результата решим прямую задачу. Полученные значения $\varphi_2,\varphi_3$ подставим в \eqref{eq:graph}. Программа для нахождения $\varphi_2,\varphi_3$, а также графики реальных и программных значений координат представлены в Приложении 1.
+
+Также было получено квадратичное отклонение: $$||Z(t)-Z^*||_2=4.65\cdot10^{-16}$$
