@@ -1,64 +1,26 @@
-\chapter{\MakeUppercase{Построение рабочей области схвата в вертикальной плоскости}}
+\chapter{\MakeUppercase{ Управление по положению схвата. Численный метод Ньютона. }}
 
-\section{Выражение матрицы однородного преобразования для соседних
-звеньев через параметры Денавита-Хартенберга}
-Используем решение прямой задачи кинематики, полученное методом однородных преобразований.
+\section{Постановка задачи}
+Дан вектор $ X = \begin{bmatrix}
+    X_{1A}(t) \\ Z_{1A}(t)
+\end{bmatrix} $, требуется найти $ q = \begin{bmatrix}
+    \phi_2 \\ \phi_3
+\end{bmatrix} $ методом Ньютона.
 
-Требуется найти $ \rho_A $ - столбец однородных координат точки $ А $ в неподвижных осях.
-$$ \rho_A=\begin{bmatrix}
-X_A \\
-Y_A \\
-Z_A \\
-1
-\end{bmatrix} $$
-
-Известны $ T_{i, i+1} , \rho_A^{(N)}$.
-
+\section{Метод Ньютона}
+Путем итерационных приближений находится $ q^{(k+1)}=q^{(k)}-p^{(k)} $, где $ p^{(k)} $ -- вектор полного шага.
 \begin{align*}
-    & \rho_A^{(N-1)}=T_{N-1, N}\cdot \rho_A^{(N)} \\
-    & \rho_A^{(N-2)}=T_{N-2, N-1}\cdot \rho_A^{(N-1)}=T_{N-2, N-1}\cdot T_{N-1,N} \cdot \rho_A^{(N)} \\
-    & \vdots  \\
-    & \rho_{A} =T_{01}\cdot T_{12}\cdot \dots \cdot T_{N-1, N} \cdot \rho_A^{(N)}
+    & J(q^{(k)}) \cdot p^{(k)} = F(q^{(k)}) \\
+    & J = \frac{\partial F}{\partial q} = \begin{bmatrix}
+        \frac{\partial X_{1A}}{\partial \varphi_2} & \frac{\partial X_{1A}}{\partial \varphi_3} \\ \\
+        \frac{\partial Z_{1A}}{\partial \varphi_2} & \frac{\partial Z_{1A}}{\partial \varphi_3}
+    \end{bmatrix}
 \end{align*}
 
-Тогда матрица однородных преобразований вычисляется следующим образом: 
-$$ T_{0, N}=T_{01}\cdot T_{12}\cdot \dots \cdot T_{N-1, N}, $$
-
-\noindent причем $ T_{i, i+1} $ вычисляется, как показано ниже:
-$$  T_{i, i+1} = T_{\theta_i} \cdot T_{d_i} \cdot T_{a_{i+1}} \cdot T_{\alpha_{i+1}}, $$
-
-\noindent где $ T_\theta $ - матрица поворота вокруг оси \textit{Z}, $ T_d $ - матрица параллельного переноса вдоль оси \textit{Z}, $ T_a $ - матрица параллельного переноса вдоль оси \textit{X}, $ T_\alpha $ - матрица поворота вокруг оси \textit{X}.
-
+Если размерность $ J $ небольшая, то можно найти $ p^{(k)} = J^{-1}(q^{(k)}) \cdot F(q^{(k)}) $. Здесь и выше $ J $ -- это матрица Якоби. Она формируется путем дифференцирования графа координат схвата по обобщенным координатам. Граф для координат схвата:
 \begin{align*}
-    & T_\theta = \begin{bmatrix}
-        \cos \theta_i & -\sin \theta_i & 0 & 0 \\
-        \sin \theta_i & \cos \theta_i & 0 & 0 \\
-        0 & 0 & 1 & 0 \\
-        0 & 0 & 0 & 1
-    \end{bmatrix}, 
-    T_d = \begin{bmatrix}
-        1 & 0 & 0 & 0 \\
-        0 & 1 & 0 & 0 \\
-        0 & 0 & 1 & d \\
-        0 & 0 & 0 & 1
-    \end{bmatrix}, \\
-    & T_a = \begin{bmatrix}
-        1 & 0 & 0 & a_{i} \\
-        0 & 1 & 0 & 0 \\
-        0 & 0 & 1 & 0 \\
-        0 & 0 & 0 & 1
-    \end{bmatrix},
-    T_\alpha = \begin{bmatrix}
-        1 & 0 & 0 & 0 \\
-        0 & \cos \alpha_{i} & -\sin \alpha_{i} & 0 \\
-        0 & \sin \alpha_{i} & \cos \alpha_{i} & 0 \\
-        0 & 0 & 0 & 1
-    \end{bmatrix} .
+    X_{1A}&=d_1+l_2\sin\varphi_2+l_3\sin{(\varphi_2+\varphi_3)} \\
+    Z_{1A}&=l_1+l_2\cos\varphi_2+l_3\cos{(\varphi_2+\varphi_3)}
 \end{align*}
 
-\section{Рабочая область манипулятора в вертикальной плоскости}
-Построение рабочей области было проведено в среде \textit{Wolfram Mathematica}. 
-
-\begin{code}
-    
-\end{code}
+При помощи найденных численно $ \varphi_1, \varphi_2 $ можно решить прямую задачу кинематики, подставив значения в граф. После чего сравнить полученную траекторию движения с программным движением.
